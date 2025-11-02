@@ -188,7 +188,9 @@ app.post("/api/books/:bookId/comments", async (req, res) => {
        RETURNING *`,
       [id, bookId, text, page || "", type || "note"]
     );
-
+    // Map created_at to timestamp for frontend
+    const comment = result.rows[0];
+    comment.timestamp = comment.created_at;
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error("Error adding comment:", err);
@@ -223,7 +225,7 @@ app.delete("/api/comments/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query(
-      "DELETE FROM comments WHERE id = $3 RETURNING *",
+      "DELETE FROM comments WHERE id = $1 RETURNING *",
       [id]
     );
 
