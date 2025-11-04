@@ -20,7 +20,14 @@ const pool = new Pool({
 });
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://sparking-creation-for-book-lovers.netlify.app"
+        : "http://localhost:8000",
+  })
+);
 app.use(express.json());
 
 // Test database connection
